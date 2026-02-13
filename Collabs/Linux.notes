@@ -1,0 +1,10 @@
+
+
+[√] Comandos de Linux
+
+cd home/Robotica/ROS2
+
+
+[√] Build 
+
+ros2 launch webots_ros2_turtlebot robot_launch.py
