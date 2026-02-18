@@ -4,31 +4,30 @@ class Moto(Transporte):
     """
     Clase hijo que representa una motocicleta, hereda de Transporte.
     """
-    def __init__(self, marca, modelo, año, cilindrada):
+    # Declaración de variables privadas específicas de Moto
+    __cilindrada: int
+
+    def __init__(self, marca: str, modelo: str, año: int, cilindrada: int):
         """
         Inicializa un objeto Moto.
-
-        Args:
-            marca (str): La marca de la moto.
-            modelo (str): El modelo de la moto.
-            año (int): El año de fabricación de la moto.
-            cilindrada (int): La cilindrada del motor en cc.
         """
         super().__init__(marca, modelo, año)
-        self.cilindrada = cilindrada
+        self.__cilindrada = cilindrada
+
+    @property
+    def cilindrada(self):
+        return self.__cilindrada
 
     def mostrar_info(self):
         """
         Muestra la información de la moto, incluyendo sus atributos específicos.
-        (Polimorfismo - sobreescritura de método)
         """
         info_padre = super().mostrar_info()
-        return f"{info_padre}, Cilindrada: {self.cilindrada}cc"
+        return f"{info_padre}, Cilindrada: {self.__cilindrada}cc"
 
-    def mover(self, distancia):
+    def mover(self, distancia: float):
         """
         Implementación específica para mover una moto.
-        (Polimorfismo - implementación de método)
         """
         if self.encendido:
             return f"La moto {self.marca} {self.modelo} está rodando por {distancia} km."

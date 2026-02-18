@@ -4,33 +4,36 @@ class Auto(Transporte):
     """
     Clase hijo que representa un auto, hereda de Transporte.
     """
-    def __init__(self, marca, modelo, año, numero_puertas, tipo_combustible):
+    # Declaración de variables privadas específicas de Auto
+    __numero_puertas: int
+    __tipo_combustible: str
+
+    def __init__(self, marca: str, modelo: str, año: int, numero_puertas: int, tipo_combustible: str):
         """
         Inicializa un objeto Auto.
-
-        Args:
-            marca (str): La marca del auto.
-            modelo (str): El modelo del auto.
-            año (int): El año de fabricación del auto.
-            numero_puertas (int): El número de puertas del auto.
-            tipo_combustible (str): El tipo de combustible que utiliza el auto.
         """
         super().__init__(marca, modelo, año)
-        self.numero_puertas = numero_puertas
-        self.tipo_combustible = tipo_combustible
+        self.__numero_puertas = numero_puertas
+        self.__tipo_combustible = tipo_combustible
+
+    @property
+    def numero_puertas(self):
+        return self.__numero_puertas
+
+    @property
+    def tipo_combustible(self):
+        return self.__tipo_combustible
 
     def mostrar_info(self):
         """
         Muestra la información del auto, incluyendo sus atributos específicos.
-        (Polimorfismo - sobreescritura de método)
         """
         info_padre = super().mostrar_info()
-        return f"{info_padre}, {self.numero_puertas} puertas, combustible: {self.tipo_combustible}"
+        return f"{info_padre}, {self.__numero_puertas} puertas, combustible: {self.__tipo_combustible}"
 
-    def mover(self, distancia):
+    def mover(self, distancia: float):
         """
         Implementación específica para mover un auto.
-        (Polimorfismo - implementación de método)
         """
         if self.encendido:
             return f"El auto {self.marca} {self.modelo} se está conduciendo por {distancia} km en la carretera."

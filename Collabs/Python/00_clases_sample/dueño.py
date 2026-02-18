@@ -1,34 +1,47 @@
+from typing import List
+from transporte import Transporte
+
 class Dueño:
     """
     Clase que representa al dueño de un vehículo.
     """
-    def __init__(self, nombre, direccion):
+    # Declaración de variables privadas
+    __nombre: str
+    __direccion: str
+    __vehiculos: List[Transporte]
+
+    def __init__(self, nombre: str, direccion: str):
         """
         Inicializa un objeto Dueño.
-
-        Args:
-            nombre (str): El nombre del dueño.
-            direccion (str): La dirección del dueño.
         """
-        self.nombre = nombre
-        self.direccion = direccion
-        self.vehiculos = []
+        self.__nombre = nombre
+        self.__direccion = direccion
+        self.__vehiculos = []
 
-    def comprar_vehiculo(self, vehiculo):
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @property
+    def direccion(self):
+        return self.__direccion
+
+    @property
+    def vehiculos(self):
+        return self.__vehiculos
+
+    def comprar_vehiculo(self, vehiculo: Transporte):
         """
         Añade un vehículo a la lista de vehículos del dueño.
-
-        Args:
-            vehiculo (Transporte): El vehículo a añadir.
         """
-        self.vehiculos.append(vehiculo)
-        print(f"{self.nombre} ha comprado un {vehiculo.marca} {vehiculo.modelo}.")
+        self.__vehiculos.append(vehiculo)
+        print(f"{self.__nombre} ha comprado un {vehiculo.marca} {vehiculo.modelo}.")
 
     def mostrar_vehiculos(self):
         """Muestra todos los vehículos que posee el dueño."""
-        print(f"Vehículos de {self.nombre}:")
-        if not self.vehiculos:
+        print(f"Vehículos de {self.__nombre}:")
+        if not self.__vehiculos:
             print("No posee ningún vehículo.")
         else:
-            for vehiculo in self.vehiculos:
+            for vehiculo in self.__vehiculos:
                 print(f"- {vehiculo.mostrar_info()}")

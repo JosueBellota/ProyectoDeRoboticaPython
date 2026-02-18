@@ -2,44 +2,63 @@ class Transporte:
     """
     Clase padre que representa un medio de transporte genérico.
     """
-    def __init__(self, marca, modelo, año):
+    # Declaración de variables privadas antes del constructor
+    __marca: str
+    __modelo: str
+    __año: int
+    __encendido: bool
+
+    def __init__(self, marca: str, modelo: str, año: int):
         """
         Inicializa un objeto de transporte.
-
-        Args:
-            marca (str): La marca del vehículo.
-            modelo (str): El modelo del vehículo.
-            año (int): El año de fabricación del vehículo.
         """
-        self.marca = marca
-        self.modelo = modelo
-        self.año = año
-        self.encendido = False
+        self.__marca = marca
+        self.__modelo = modelo
+        self.__año = año
+        self.__encendido = False
+
+    @property
+    def marca(self):
+        return self.__marca
+
+    @property
+    def modelo(self):
+        return self.__modelo
+
+    @property
+    def año(self):
+        return self.__año
+
+    @property
+    def encendido(self):
+        return self.__encendido
+
+    @encendido.setter
+    def encendido(self, valor: bool):
+        self.__encendido = valor
 
     def encender(self):
         """Enciende el motor del vehículo."""
-        if not self.encendido:
-            self.encendido = True
-            return f"El motor de {self.marca} {self.modelo} está ahora encendido."
+        if not self.__encendido:
+            self.__encendido = True
+            return f"El motor de {self.__marca} {self.__modelo} está ahora encendido."
         else:
-            return f"El motor de {self.marca} {self.modelo} ya estaba encendido."
+            return f"El motor de {self.__marca} {self.__modelo} ya estaba encendido."
 
     def apagar(self):
         """Apaga el motor del vehículo."""
-        if self.encendido:
-            self.encendido = False
-            return f"El motor de {self.marca} {self.modelo} está ahora apagado."
+        if self.__encendido:
+            self.__encendido = False
+            return f"El motor de {self.__marca} {self.__modelo} está ahora apagado."
         else:
-            return f"El motor de {self.marca} {self.modelo} ya estaba apagado."
+            return f"El motor de {self.__marca} {self.__modelo} ya estaba apagado."
 
     def mostrar_info(self):
         """Muestra la información básica del vehículo."""
-        return f"Vehículo: {self.año} {self.marca} {self.modelo}"
+        return f"Vehículo: {self.__año} {self.__marca} {self.__modelo}"
 
-    def mover(self, distancia):
+    def mover(self, distancia: float):
         """
         Método genérico para mover el vehículo.
-        Las clases hijas deben implementar su propia lógica.
         """
         raise NotImplementedError("Este método debe ser implementado por las clases hijas.")
-

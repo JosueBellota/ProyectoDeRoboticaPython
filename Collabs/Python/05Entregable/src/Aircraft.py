@@ -6,22 +6,22 @@ class Aircraft:
     """ Creamos una nueva persona con un nombre y una edad """
 
 # texto
-    __registration = None 
+    __registration = str 
 
 # mnumero
-    __model = None
+    __model = str
 # lista
-    __nun_rows = None
+    __nun_rows = int
 # diccionario
-    __num_seats_per_row = None
+    __num_seats_per_row = int
 
 
     def __init__(self, registration, model, num_rows, num_seats_per_row):
 
-        registration = self.registration
-        model = self.model
-        num_rows = self.num_rows
-        num_seats_per_row = self.num_seats_per_row
+        self.registration = registration
+        self.model  = model
+        self.num_rows = num_rows
+        self.num_seats_per_row = num_seats_per_row
 
     def get_registration():
 
@@ -29,12 +29,15 @@ class Aircraft:
         Returns:
         seats: The number of seats
         """
+
+        return __registration
     def get_model():
 
         """Calculates the number of seats
         Returns:
         seats: The number of seats
         """
+        
 
 
     def seating_plan():
