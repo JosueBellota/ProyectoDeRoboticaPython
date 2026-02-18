@@ -1,20 +1,27 @@
+# from pprint import pprint
+
+# pprint(seating)
+
 class Aircraft:
     """ Creamos una nueva persona con un nombre y una edad """
 
-    __registration = ""
+# texto
+    __registration = None 
 
-    __model = ""
-
+# mnumero
+    __model = None
+# lista
     __nun_rows = None
-
+# diccionario
     __num_seats_per_row = None
 
 
     def __init__(self, registration, model, num_rows, num_seats_per_row):
 
         registration = self.registration
-        model = self.__model
-        num_rows = self
+        model = self.model
+        num_rows = self.num_rows
+        num_seats_per_row = self.num_seats_per_row
 
     def get_registration():
 
