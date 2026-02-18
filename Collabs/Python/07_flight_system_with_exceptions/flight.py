@@ -1,126 +1,94 @@
-from pprint import pprint
+################################################################################
+#                                                                              #
+#                 07 - flight.py (con manejo de excepciones)                   #
+#                                                                              #
+################################################################################
+
+# Este fichero define la clase `Flight` y es un buen ejemplo de cómo usar
+# excepciones (`raise ValueError`) para validar datos y reforzar reglas de negocio.
+
 from aircraft import Aircraft
+from passenger import Passenger
 
 class Flight:
+    """Un vuelo con un número, una aeronave y una asignación de asientos."""
+
     def __init__(self, number, aircraft):
-        # Validation for 'number'
-        if not (isinstance(number, str) and len(number) > 2 and number[:2].isalpha() and number[:2].isupper() and number[2:].isdigit() and int(number[2:]) < 9999):
-            raise ValueError("Invalid flight number format. Expected two uppercase letters followed by digits less than 9999 (e.g., 'BA117').")
+        # --- Validación en el constructor ---
+        if not (len(number) > 2 and number[:2].isalpha() and number[2:].isdigit()):
+            raise ValueError(f"Número de vuelo inválido: '{number}'")
 
-        self.__number = number
-        self.__aircraft = aircraft
-        rows, seats_letters = self.__aircraft.seating_plan()
-        self.__seating = [None] + [{letter: None for letter in seats_letters} for _ in range(1, self.__aircraft.num_rows + 1)]
+        if not isinstance(aircraft, Aircraft):
+            raise TypeError(f"Se esperaba un objeto Aircraft, pero se recibió {type(aircraft).__name__}")
 
-    def __get_number(self):
-        return self.__number
+        self._number = number
+        self._aircraft = aircraft
+        rows, seats = self._aircraft.seating_plan()
+        self._seating = [None] + [{letter: None for letter in seats} for _ in rows]
 
-    def __get_aircraft(self):
-        return self.__aircraft
+    def number(self):
+        return self._number
 
-    def __parse_seat(self, seat):
-        """Divide a seat designator in row and letter
-        Args:
-          seat: The seat designator to be divided such as '12C'
-        Returns:
-          row: The row of the seat such as 12
-          letter: The letter of the seat such as 'C'
-        """
-        if not isinstance(seat, str) or len(seat) < 2:
-            raise ValueError("Seat designator must be a string of at least two characters (e.g., '12A').")
+    def aircraft_model(self):
+        return self._aircraft.model
 
+    def _parse_seat(self, seat):
+        """Valida y descompone un designador de asiento (ej. '12C') en (fila, letra)."""
+        rows, seat_letters = self._aircraft.seating_plan()
+        
         letter = seat[-1].upper()
-        row_str = seat[:-1]
+        if letter not in seat_letters:
+            raise ValueError(f"Asiento inválido: la letra '{letter}' no es válida.")
 
-        if not row_str.isdigit():
-            raise ValueError(f"Seat row '{row_str}' must be numeric.")
-        row = int(row_str)
-
-        if not (1 <= row <= self.__aircraft.num_rows):
-            raise ValueError(f"Seat row {row} is out of valid range (1-{self.__aircraft.num_rows}).")
-
-        if letter not in self.__aircraft.seating_plan()[1]: # Check if letter is valid for aircraft
-            raise ValueError(f"Seat letter '{letter}' is invalid for this aircraft.")
+        try:
+            row = int(seat[:-1])
+        except ValueError:
+            raise ValueError(f"Asiento inválido: la fila '{seat[:-1]}' no es un número.")
+            
+        if row not in rows:
+            raise ValueError(f"Asiento inválido: la fila '{row}' no existe.")
 
         return row, letter
 
-    def allocate_passenger(self, seat, passenger):
-        """Allocate a seat to a passenger
-        Args:
-          seat: A seat designator such as '12C' or '21F'
-          passenger: The passenger data such as ('Jack', 'Shephard', '85994003S')
-        """
-        row, letter = self.__parse_seat(seat)
+    def allocate_passenger(self, passenger, seat):
+        """Asigna un pasajero a un asiento."""
+        if not isinstance(passenger, Passenger):
+            raise TypeError("El pasajero debe ser un objeto de la clase Passenger.")
 
-        if self.__seating[row][letter] is not None:
-            raise ValueError(f"Seat {seat} is already occupied.")
+        row, letter = self._parse_seat(seat)
 
-        self.__seating[row][letter] = passenger
+        if self._seating[row][letter] is not None:
+            raise ValueError(f"El asiento {seat} ya está ocupado.")
+            
+        self._seating[row][letter] = passenger
 
     def reallocate_passenger(self, from_seat, to_seat):
-        """Reallocate a passenger to a different seat
-        Args:
-          from_seat: The existing seat designator for the passenger such as '12C'
-          to_seat: The new seat designator
-        """
-        from_row, from_letter = self.__parse_seat(from_seat)
-        to_row, to_letter = self.__parse_seat(to_seat)
+        """Reasigna un pasajero de un asiento a otro."""
+        from_row, from_letter = self._parse_seat(from_seat)
+        if self._seating[from_row][from_letter] is None:
+            raise ValueError(f"No hay pasajero en el asiento {from_seat} para reasignar.")
 
-        if self.__seating[from_row][from_letter] is None:
-            raise ValueError(f"Seat {from_seat} is empty, cannot reallocate from it.")
-        if self.__seating[to_row][to_letter] is not None:
-            raise ValueError(f"Target seat {to_seat} is already occupied.")
-
-        passenger_data = self.__seating[from_row][from_letter]
-        self.__seating[from_row][from_letter] = None
-        self.__seating[to_row][to_letter] = passenger_data
+        to_row, to_letter = self._parse_seat(to_seat)
+        if self._seating[to_row][to_letter] is not None:
+            raise ValueError(f"El asiento de destino {to_seat} ya está ocupado.")
+            
+        self._seating[to_row][to_letter] = self._seating[from_row][from_letter]
+        self._seating[from_row][from_letter] = None
 
     def num_available_seats(self):
-        """Obtains the amount of unoccupied seats
-        Returns:
-          The number of unoccupied seats
-        """
-        count = 0
-        for row in self.__seating[1:]:
-            for seat in row.values():
-                if seat is None:
-                    count += 1
-        return count
+        """Devuelve el número de asientos libres."""
+        return sum(sum(1 for s in row.values() if s is None)
+                   for row in self._seating if row)
 
-    def print_seating(self):
-        """Prints in console the seating plan
-        Example of one row:
-          {'A': None, 'B': None, 'C': None, 'D': None, 'E': None, 'F': None}
-        """
-        pprint(self.__seating)
+    def make_boarding_cards(self, card_printer):
+        """Crea las tarjetas de embarque para todos los pasajeros."""
+        for passenger, seat in self._passenger_seats():
+            card_printer(passenger, self.number(), self.aircraft_model(), seat)
 
-    def __passenger_seats(self):
-        """A generator function to iterate the occupied seating locations
-        Returns:
-          generator: Tuple of the passenger data and the seat
-        """
-        for row_idx, row in enumerate(self.__seating[1:], start=1):
-            for seat_letter, passenger_data in row.items():
-                if passenger_data is not None:
-                    yield passenger_data, f"{row_idx}{seat_letter}"
-
-    def print_boarding_cards(self):
-        """Prints in console the boarding card for each passenger
-        Example of one boarding card:
-        ----------------------------------------------------------
-        |     Jack Sheppard 85994003S 15E BA758 Airbus A319      |
-        ----------------------------------------------------------
-        """
-        for passenger_data, seat in self.__passenger_seats():
-            name, surname, id_card = passenger_data
-            card_info = f"{name} {surname} {id_card} {seat} {self.__number} {self.__aircraft.model}"
-            print("-" * 58)
-            print(f"| {card_info.ljust(54)} |")
-            print("-" * 58)
-
-    def get_seating(self):
-        return self.__seating
-
-    # Getters
-    number = property(__get_number)
-    aircraft = property(__get_aircraft)
+    def _passenger_seats(self):
+        """Generador que devuelve los pasajeros y sus asientos."""
+        rows, seat_letters = self._aircraft.seating_plan()
+        for row in rows:
+            for letter in seat_letters:
+                if self._seating[row][letter] is not None:
+                    yield (self._seating[row][letter], f"{row}{letter}")

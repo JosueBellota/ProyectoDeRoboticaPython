@@ -1,39 +1,45 @@
-# 04_01_text_files.py
+################################################################################
+#                                                                              #
+#                         04_01_text_files.py                                  #
+#                                                                              #
+################################################################################
 
-# Para trabajar con ficheros usamos open(file, mode, encoding)
-# Modos comunes: 
-# 'r' - lectura (por defecto)
-# 'w' - escritura (sobreescribe)
-# 'a' - añadir (append)
-# 't' - modo texto (por defecto)
-# 'b' - modo binario
+# --- Modos de apertura comunes ---
+# 'r': Lectura (Read). Error si el fichero no existe.
+# 'w': Escritura (Write). Sobrescribe el fichero si ya existe.
+# 'a': Añadir (Append). Añade contenido al final del fichero.
+# 't': Modo texto (por defecto).
+# 'b': Modo binario.
 
-# --- 1. Escritura básica ---
-# 'wt' -> write text
-f = open("fichero.txt", mode="wt", encoding="utf-8")
-f.write("Esto es un mensaje.")
-f.write("Esto es otro mensaje en la misma línea. ")
-f.write("Y una nueva línea.")
-f.close() # ¡Importante cerrar siempre!
 
-# --- 2. Lectura básica ---
-# 'rt' -> read text
-f = open("fichero.txt", mode="rt", encoding="utf-8")
+# ---------------------- 1. Escritura en un fichero de texto ----------------------
+# Usar 'with' asegura que el fichero se cierre automáticamente.
+with open("fichero_ejemplo.txt", mode="w", encoding="utf-8") as f:
+    f.write("Esto es un mensaje.\n")
+    f.write("Y una nueva línea.\n")
 
-# Leer un número específico de caracteres
-diez_caracteres = f.read(10)
-print(f"Primeros 10 caracteres: '{diez_caracteres}'")
+print("Fichero 'fichero_ejemplo.txt' escrito.")
 
-# Leer el resto del fichero
-resto = f.read()
-print(f"Resto del fichero:{resto}")
-f.close()
 
-# --- 3. Posicionamiento: seek() y tell() ---
-f = open("fichero.txt", mode="rt", encoding="utf-8")
-f.read(5)
-print(f"Posición actual tras leer 5 chars: {f.tell()}")
+# ---------------------- 2. Lectura de un fichero de texto ----------------------
+with open("fichero_ejemplo.txt", mode="r", encoding="utf-8") as f:
+    # `read()` sin argumentos lee el fichero completo.
+    contenido_completo = f.read()
+    print("\nContenido completo del fichero:")
+    print(contenido_completo)
 
-f.seek(0) # Volver al inicio
-print(f"Volvemos a leer desde el inicio: {f.read(10)}")
-f.close()
+
+# ---------------- 3. Posicionamiento manual: seek() y tell() ----------------
+# `tell()`: Devuelve la posición actual del cursor (en bytes).
+# `seek(n)`: Mueve el cursor a la posición `n` (en bytes).
+with open("fichero_ejemplo.txt", mode="r", encoding="utf-8") as f:
+    contenido_parcial = f.read(5)
+    print(f"\nLeídos 5 caracteres: '{contenido_parcial}'")
+    print(f"Posición actual del cursor: {f.tell()}")
+
+    # Mover el cursor al inicio del fichero (posición 0).
+    f.seek(0)
+    print("Cursor movido al inicio (seek(0)).")
+    
+    contenido_desde_inicio = f.read(10)
+    print(f"Leídos 10 caracteres desde el inicio: '{contenido_desde_inicio}'")

@@ -142,8 +142,7 @@ if __name__ == "__main__":
 
     # Ejemplo de propagación
     lista_main = [4, 5, 1, 3]
-    print("
---- Demostración de Propagación de Excepciones ---")
+    print("--- Demostración de Propagación de Excepciones ---")
     print("inicio del main para propagación")
 
     ejemplo_propagacion_directa(lista_main, 4) # La excepción se maneja dentro de la función

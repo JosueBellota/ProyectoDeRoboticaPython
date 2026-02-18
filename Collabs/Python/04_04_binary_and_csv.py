@@ -1,37 +1,52 @@
-# 04_04_binary_and_csv.py
+################################################################################
+#                                                                              #
+#                      04_04_binary_and_csv.py                                 #
+#                                                                              #
+################################################################################
+
+# Manejo de ficheros binarios y CSV.
+
+# --------------------------- 1. Ficheros Binarios ---------------------------
+# Para contenido no textual (imágenes, etc.). Se usa el modo 'b' ('rb', 'wb').
+# Los datos se leen y escriben como `bytes`, no `str`. No se usa `encoding`.
+
+# Ejemplo: Escribir y leer bytes.
+datos_binarios = b'Hola Mundo Binario'
+with open("fichero.bin", "wb") as f:
+    f.write(datos_binarios)
+
+with open("fichero.bin", "rb") as f:
+    contenido_leido = f.read()
+    print(f"Contenido binario leído: {contenido_leido}")
+    print(f"Contenido decodificado: {contenido_leido.decode('utf-8')}")
+
+
+# ---------------------------- 2. Ficheros CSV -----------------------------
+# Para datos tabulares, usando el módulo `csv`.
 import csv
 
-# --- 1. Ficheros Binarios (rb, wb) ---
-# Se usan para imágenes, ejecutables, etc. No usan 'encoding'.
-try:
-    with open('lena.png', 'rb') as f:
-        contenido = f.read(20) # Leemos los primeros 20 bytes
-        print(f"Primeros bytes binarios: {contenido}")
-except FileNotFoundError:
-    print("Nota: No se encontró 'lena.png' para el ejemplo binario.")
-
-
-# --- 2. Ficheros CSV ---
-# Útiles para datos tabulares.
-
-# Crear un CSV de ejemplo
-datos = [
+datos_para_csv = [
     ['Nombre', 'Edad', 'Ciudad'],
     ['Juan', '25', 'Madrid'],
-    ['Maria', '30', 'Barcelona'],
-    ['Pedro', '22', 'Valencia']
+    ['Maria', '30', 'Barcelona']
 ]
 
-with open('usuarios.csv', 'wt', newline='', encoding='utf-8') as file:
-    writer = csv.writer(file)
-    writer.writerows(datos)
+# --- Escritura de un fichero CSV ---
+# `newline=''` evita saltos de línea extra en algunos SO.
+with open('usuarios.csv', 'w', newline='', encoding='utf-8') as file:
+    escritor_csv = csv.writer(file)
+    escritor_csv.writerows(datos_para_csv)
 
-# Leer un CSV
-print("Contenido del CSV:")
-with open('usuarios.csv', 'rt', encoding='utf-8') as file:
-    reader = csv.reader(file)
-    for fila in reader:
-        print(f"Fila: {fila}")
+print("\nFichero 'usuarios.csv' escrito.")
 
-# Nota sobre delimitadores:
-# Si el CSV usa ';' o tabs, se especifica: csv.reader(file, delimiter=';')
+# --- Lectura de un fichero CSV ---
+with open('usuarios.csv', 'r', encoding='utf-8') as file:
+    lector_csv = csv.reader(file)
+    
+    print("Contenido leído del CSV:")
+    for fila in lector_csv:
+        print(f"  > {fila}")
+
+# --- Nota sobre delimitadores ---
+# Para usar, por ejemplo, punto y coma (;) en lugar de coma:
+# lector_csv = csv.reader(file, delimiter=';')

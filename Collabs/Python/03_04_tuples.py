@@ -1,34 +1,50 @@
-# 03_04_tuples.py
+################################################################################
+#                                                                              #
+#                           03_04_tuples.py                                    #
+#                                                                              #
+################################################################################
 
-# Las tuplas son secuencias INMUTABLES (no se pueden modificar tras su creación)
+# Colecciones de elementos ORDENADOS e INMUTABLES (no se pueden modificar).
 
-# Creación
-tupla1 = (25, 12, 14, 29)
-tupla2 = 25, 12, 14, 29 # Paréntesis opcionales
-print(f"Tupla 1: {tupla1}")
+# --------------------------- Creación de Tuplas ---------------------------
+tupla_con_parentesis = (25, 12, 14, 29, 12)
+tupla_sin_parentesis = 25, 12, 14, 29
 
-# Tupla de un solo elemento (requiere coma final)
-tupla_unica = (43,)
-print(f"Tupla única: {tupla_unica} - Tipo: {type(tupla_unica)}")
+# Tupla de un solo elemento (la coma final es obligatoria).
+tupla_un_elemento = (43,)
 
-# Acceso (igual que las listas, por índice)
-print(f"Primer elemento: {tupla1[0]}")
+# Crear una tupla desde otra colección (ej. una lista).
+tupla_desde_lista = tuple([1, 2, 3])
+print("Tupla:", tupla_con_parentesis)
+print("Tupla de 1 elemento:", tupla_un_elemento)
 
-# Métodos disponibles (solo de lectura)
-print(f"Longitud: {len(tupla1)}")
-print(f"Contar apariciones de 12: {tupla1.count(12)}")
-print(f"Índice del valor 14: {tupla1.index(14)}")
 
-# Intentar modificar una tupla daría error:
-# tupla1[0] = 10 # TypeError: 'tuple' object does not support item assignment
+# -------------------------- Acceso y Slicing --------------------------
+# Igual que las listas, usando índices.
+print("\nPrimer elemento:", tupla_con_parentesis[0])
+print("Último elemento:", tupla_con_parentesis[-1])
+print("Slice [1:4]:", tupla_con_parentesis[1:4])
 
-# Uso común: Retornar varios valores en una función
-def area_y_perimetro(base, altura):
-    area = base * altura
-    perimetro = (base * 2) + (altura * 2)
-    return area, perimetro # Se devuelve como una tupla
 
-b, a = 2, 3
-res_area, res_perim = area_y_perimetro(b, a) # Unpacking de la tupla
-print(f"
-Rectángulo {b}x{a}: Área={res_area}, Perímetro={res_perim}")
+# ------------------------ Inmutabilidad de las Tuplas ------------------------
+# Intentar modificar un elemento de una tupla provoca un error (TypeError).
+# tupla_con_parentesis[0] = 99  # <-- Esto fallaría
+
+
+# ----------------------------- Métodos de Tupla -----------------------------
+# Las tuplas solo tienen métodos que no modifican su contenido.
+print("\nLongitud:", len(tupla_con_parentesis))
+print("Contar apariciones del 12:", tupla_con_parentesis.count(12))
+print("Índice de la primera aparición del 14:", tupla_con_parentesis.index(14))
+
+
+# ----------- Desempaquetado (Unpacking) y uso en funciones -----------
+def calcular_operaciones(a, b):
+    # Las funciones pueden devolver múltiples valores, que se empaquetan en una tupla.
+    return a + b, a - b
+
+# La tupla devuelta se puede "desempaquetar" en variables individuales.
+resultado_suma, resultado_resta = calcular_operaciones(5, 3)
+
+print(f"\nResultado de la suma (desempaquetado): {resultado_suma}")
+print(f"Resultado de la resta (desempaquetado): {resultado_resta}")

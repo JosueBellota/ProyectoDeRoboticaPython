@@ -1,40 +1,69 @@
-# 03_05_dictionaries.py
+################################################################################
+#                                                                              #
+#                        03_05_dictionaries.py                                 #
+#                                                                              #
+################################################################################
 
-# Diccionarios: Estructuras clave-valor (dict)
+# Colecciones de pares clave-valor. Son mutables y no tienen un orden garantizado
+# (aunque en versiones recientes de Python recuerdan el orden de inserción).
 
-# Creación
-dic_vacio = {}
-contactos = {123: "Juan", 456: "Maria", 789: "Pedro"}
-print(f"Diccionario inicial: {contactos}")
-
-# Acceso
-print(f"Contacto 456: {contactos[456]}")
-# .get() es más seguro porque no da error si la clave no existe (devuelve None o un defecto)
-print(f"Contacto inexistente (get): {contactos.get(999, 'No encontrado')}")
-
-# Añadir o Modificar
-contactos[122] = "Eva"      # Añade nuevo
-contactos[123] = "Juanito"  # Modifica existente
-contactos.update({124: "Manolo", 789: "Peter"}) # Actualización múltiple
-print(f"Tras modificaciones: {contactos}")
-
-# Eliminar
-del contactos[456]
-valor_eliminado = contactos.pop(789)
-print(f"Tras borrar 456 y 789 (era {valor_eliminado}): {contactos}")
-
-# Comprobaciones
-print(f"¿Existe la clave 123? {123 in contactos}")
-print(f"Tamaño: {len(contactos)}")
-
-# Recorrer diccionarios
-print("--- Recorrido ---")
-for nif, nombre in contactos.items():
-    print(f"NIF: {nif} -> Nombre: {nombre}")
-
-# Diccionarios anidados (Estructuras más complejas)
-usuarios = {
-    "user1": {"nombre": "Paco", "email": "paco@mail.com", "vip": True},
-    "user2": {"nombre": "Ana", "email": "ana@mail.com", "vip": False}
+# ------------------------- Creación de Diccionarios -------------------------
+contactos = {
+    12345678: "Juan Pérez",
+    "user_admin": "Maria Garcia",
 }
-print(f"Email de user1: {usuarios['user1']['email']}")
+print("Diccionario:", contactos)
+
+
+# -------------------------- Acceso a los Valores --------------------------
+# Con corchetes `[]` (da error si la clave no existe).
+print("\nAcceso con [12345678]:", contactos[12345678])
+
+# Con `.get()` (devuelve `None` o un valor por defecto si la clave no existe).
+print("Acceso con .get('user_admin'):", contactos.get("user_admin"))
+print("Acceso a clave inexistente con .get():", contactos.get(9999, "No encontrado"))
+
+
+# ---------------------- Añadir y Modificar Elementos ----------------------
+# Si la clave no existe, se añade. Si existe, se actualiza el valor.
+contactos[11223344] = "Ana Martín"  # Añadir
+contactos[12345678] = "Juan Pérez Gómez"  # Modificar
+print("\nDiccionario modificado:", contactos)
+
+# `.update()` añade o modifica múltiples elementos.
+contactos.update({"user_admin": "Maria García López", "new_user": "Eva Ramos"})
+print("Tras update():", contactos)
+
+
+# ------------------------- Eliminar Elementos -------------------------
+# `del` elimina el par clave-valor.
+del contactos[11223344]
+print("\nDespués de `del`:", contactos)
+
+# `.pop()` elimina el par y devuelve el valor.
+valor_eliminado = contactos.pop("new_user")
+print(f"Tras `.pop()` (valor devuelto: '{valor_eliminado}'):", contactos)
+
+
+# --------------------- Comprobaciones y Utilerías ---------------------
+# Comprobar si una clave existe.
+print("\n'user_admin' in contactos:", "user_admin" in contactos)
+
+# Obtener número de pares.
+print("Tamaño:", len(contactos))
+
+
+# ----------------------- Recorrer un Diccionario -----------------------
+print("\nRecorriendo con .items():")
+for clave, valor in contactos.items():
+    print(f"  - {clave}: {valor}")
+
+# También se puede iterar sobre .keys() o .values()
+
+
+# ------------------------- Diccionarios Anidados -------------------------
+usuarios = {
+    "user1": {"nombre": "Paco", "email": "paco@mail.com"},
+    "user2": {"nombre": "Ana", "email": "ana@mail.com"},
+}
+print("\nEmail del user1:", usuarios["user1"]["email"])

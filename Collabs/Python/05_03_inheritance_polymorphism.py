@@ -1,63 +1,87 @@
-# 05_03_inheritance_polymorphism.py
+################################################################################
+#                                                                              #
+#               05_03_inheritance_polymorphism.py                              #
+#                                                                              #
+################################################################################
 
-# Herencia
+# --- 1. Herencia ---
+# La herencia permite que una clase (subclase o clase hija) adquiera los
+# atributos y métodos de otra clase (superclase o clase padre).
 
-class Figura:
-  def __init__(self, tipo):
-    self.tipo = tipo
-    self.area = 0
-    self.perimetro = 0
+# --- Clase Padre (Superclase) ---
+class Vehiculo:
+    def __init__(self, marca):
+        self.marca = marca
 
-  def __str__(self):
-    return "Figura: "+self.tipo+". Area: "+str(self.area)+" y perímetro: "+str(self.perimetro)+" \n"
+    def describir(self):
+        return f"Soy un vehículo de marca {self.marca}."
 
-class Circulo(Figura): #definimos subclase de Figura
-  PI = 3.14
+# --- Clase Hija (Subclase) ---
+# Se especifica la clase padre entre paréntesis.
+class Coche(Vehiculo):
+    def __init__(self, marca, modelo):
+        # `super()` llama a los métodos de la clase padre.
+        # Aquí, llamamos al constructor del padre para inicializar `marca`.
+        super().__init__(marca)
+        self.modelo = modelo  # Atributo propio de la subclase
 
-  def __init__(self, radio):
-    super().__init__("circulo") #llamamos al inicializador de la clase principal
-    self.radio = radio #atributo específico de la subclase
-    self.area = self.PI * self.radio**2
-    self.perimetro = 2 * self.PI * self.radio
+    # --- Sobrescritura de método ---
+    # Se redefine un método de la clase padre para que se comporte diferente.
+    def describir(self):
+        return f"Soy un coche {self.marca} {self.modelo}."
 
-  def __str__(self): #Sobreescribimos el método en la subclase
-    return "Este círculo de radio "+str(self.radio)+" tiene area: "+str(self.area)+" y perímetro: "+str(self.perimetro)+" \n"
+# --- Prueba de Herencia ---
+print("--- 1. Herencia ---")
+vehiculo_generico = Vehiculo("Genérica")
+mi_coche = Coche("Ford", "Mustang")
 
-c = Circulo(3)
-print(c) #__str__ se hereda de figura
+print(vehiculo_generico.describir())
+print(mi_coche.describir()) # Llama al método sobrescrito en Coche
 
-# Ejemplo de clase sin nada adicional (pass)
-class OtraFigura(Figura):
-  pass
 
-of = OtraFigura("otra figura")
-print(of)
+# --- 2. Polimorfismo ---
+# "Poli" = muchas, "morfismo" = formas.
+# Es la capacidad de usar una misma interfaz (función o método) para
+# tratar objetos de diferentes clases.
 
-# Polimorfismo
+class Moto(Vehiculo):
+    # No sobrescribe el método describir, por lo que usará el del padre.
+    pass
 
-class Cuadrado(Figura):
+# Esta función funciona con cualquier objeto que sea un "Vehiculo" o herede de él.
+def imprimir_descripcion(vehiculo):
+    # No necesita saber si es un Coche, una Moto o un Vehiculo, solo que tiene
+    # un método `describir()`.
+    print(vehiculo.describir())
 
-  def __init__(self, lado):
-    super().__init__("Cuadrado")
-    self.lado = lado
-    self.area = self.lado * self.lado
-    self.perimetro = self.lado * 4
+# --- Prueba de Polimorfismo ---
+print("\n--- 2. Polimorfismo ---")
+moto_de_ana = Moto("Honda")
+imprimir_descripcion(mi_coche)      # Funciona con un objeto Coche
+imprimir_descripcion(moto_de_ana)   # Funciona con un objeto Moto
 
-def mostrar_tipo(figura):#esta función se ejecuta igual para distintos tipos de objetos pasados (p.e. Circulo y Cuadrado)
-  print("El tipo es "+figura.tipo)
 
-c1 = Circulo(2)
-mostrar_tipo(c1)
-c2 = Cuadrado(2)
-mostrar_tipo(c2)
+# --- 3. Duck Typing ---
+# "Si camina como un pato y grazna como un pato, entonces debe ser un pato."
+# En Python, no nos importa la clase de un objeto, sino qué puede hacer (qué
+# métodos tiene). No es necesario que hereden de una clase común.
 
-# Duck Typing
-def mostrar_longitud(valor):
-  print("La longitud es "+str(len(valor)))
+class Pato:
+    def hablar(self):
+        return "Cuac!"
 
-palabra = "duck_typing"
-mostrar_longitud(palabra)
-lista = [5, 4, 7, 1]
-mostrar_longitud(lista)
-diccionario = {1: "Pepe", 2: "Paco", 3: "Marta"}
-mostrar_longitud(diccionario)
+class Persona:
+    def hablar(self):
+        return "¡Hola!"
+
+# Esta función no pide una clase específica, solo un objeto que tenga un método `hablar()`.
+def hacer_hablar(entidad_parlante):
+    print(entidad_parlante.hablar())
+
+# --- Prueba de Duck Typing ---
+print("\n--- 3. Duck Typing ---")
+donald = Pato()
+juan = Persona()
+
+hacer_hablar(donald)  # Funciona porque Pato tiene el método `hablar`
+hacer_hablar(juan)    # Funciona porque Persona también tiene el método `hablar`

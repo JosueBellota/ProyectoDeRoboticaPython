@@ -1,28 +1,34 @@
+################################################################################
+#                                                                              #
+#                07 - passenger.py (con manejo de excepciones)                 #
+#                                                                              #
+################################################################################
+
+# Este fichero define la clase para un Pasajero. Es una clase simple
+# principalmente para contener datos.
+
 class Passenger:
+    """Un pasajero con nombre, apellido y DNI."""
     def __init__(self, name, surname, id_card):
-        self.__name = name
-        self.__surname = surname
-        self.__id_card = id_card
+        # La validación de datos se podría añadir aquí si fuera necesario.
+        self._name = name
+        self._surname = surname
+        self._id_card = id_card
 
-    def __get_name(self):
-        return self.__name
+    # --- Properties ---
+    # Exponen los atributos internos como de solo lectura.
+    @property
+    def name(self):
+        return self._name
 
-    def __get_surname(self):
-        return self.__surname
+    @property
+    def surname(self):
+        return self._surname
 
-    def __get_id_card(self):
-        return self.__id_card
-
-    def passenger_data(self):
-        """Obtains the data of a passenger
-        Returns:
-          name: The passenger's name such as 'Jack'
-          surname: The passenger's family name such as 'Shephard'
-          id_card: The passenger's id card such as '85994003S'
-        """
-        return (self.__name, self.__surname, self.__id_card)
-
-    # Getters
-    name = property(__get_name)
-    surname = property(__get_surname)
-    id_card = property(__get_id_card)
+    @property
+    def id_card(self):
+        return self._id_card
+        
+    def __str__(self):
+        """Representación en string del objeto Pasajero."""
+        return f"Pasajero: {self.name} {self.surname} ({self.id_card})"

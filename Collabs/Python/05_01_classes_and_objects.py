@@ -1,37 +1,59 @@
-# 05_01_classes_and_objects.py
+################################################################################
+#                                                                              #
+#                   05_01_classes_and_objects.py                               #
+#                                                                              #
+################################################################################
 
-# En Python, las clases se definen con 'class' y usan PascalCase
-class Persona:
-    """ Creamos una nueva persona con un nombre y una edad """
-    unidad_masa = "kg" # Atributo de clase
+# Una CLASE es una plantilla para crear objetos.
+# Los OBJETOS (o instancias) son encarnaciones de una clase.
 
-    def __init__(self, n, e):
-        self.nombre = n
-        self.edad = e
+# --------------------------- Definición de una Clase ---------------------------
+class Coche:
+    # --- Atributo de clase ---
+    # Es compartido por todas las instancias de la clase.
+    ruedas = 4
 
-    def mostrar(self):
-        print("El nombre es ", self.nombre, " y la edad es ", self.edad)
+    # --- Constructor (`__init__`) ---
+    # Es un método especial que se llama al crear una nueva instancia.
+    # `self` se refiere a la instancia que se está creando.
+    def __init__(self, marca, modelo, color):
+        # --- Atributos de instancia ---
+        # Son específicos de cada objeto.
+        self.marca = marca
+        self.modelo = modelo
+        self.color = color
+        self.velocidad = 0
+        print(f"Se ha creado un coche {self.marca} {self.modelo}.")
 
-# Instanciación y uso
-p = Persona("Juan", 25)
-print("El nombre de p es ", p.nombre, " y la edad es ", p.edad)
-p.mostrar()
+    # --- Métodos ---
+    # Son funciones que pertenecen a la clase. El primer parámetro siempre es `self`.
+    def acelerar(self, incremento):
+        self.velocidad += incremento
+        print(f"El coche ahora va a {self.velocidad} km/h.")
 
-def matching_list(dict, value):
-  matchings = []
-  for item in dict:
-    if dict[item] == value:
-      matchings.append(item)
+    def frenar(self, decremento):
+        self.velocidad -= decremento
+        if self.velocidad < 0:
+            self.velocidad = 0
+        print(f"El coche ha reducido a {self.velocidad} km/h.")
 
-  if len(matchings) != 0:
-    return len(matchings)
-  else:
-    return None
 
-pairs = {"item1" : "coche", "item2" : "moto", "item3" : "bicicleta"}
+# -------------------------- Creación y Uso de Objetos --------------------------
+# "Instanciar" una clase es crear un objeto a partir de ella.
+print("--- Creando objetos ---")
+coche_de_ana = Coche("Renault", "Clio", "Rojo")
+coche_de_juan = Coche("Ford", "Focus", "Azul")
 
-res = matching_list(pairs, "moto")
-if res is not None:
-  print("Se han encontrado "+str(res)+" elementos")
-else:
-  print("No hay ningún item que coincida")
+# --- Acceso a atributos ---
+# Se accede a los atributos de instancia y de clase con la notación de punto.
+print(f"\nEl coche de Ana es un {coche_de_ana.marca} de color {coche_de_ana.color}.")
+print(f"Todos los coches tienen {Coche.ruedas} ruedas.")
+# También se puede acceder al atributo de clase desde la instancia
+print(f"El coche de Juan también tiene {coche_de_juan.ruedas} ruedas.")
+
+
+# --- Llamada a métodos ---
+print("\n--- Usando los métodos de los objetos ---")
+coche_de_ana.acelerar(50)
+coche_de_juan.acelerar(30)
+coche_de_ana.frenar(10)

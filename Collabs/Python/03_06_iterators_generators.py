@@ -1,47 +1,57 @@
-# 03_06_iterators_generators.py
+################################################################################
+#                                                                              #
+#                   03_06_iterators_generators.py                              #
+#                                                                              #
+################################################################################
 
-# --- Iteradores ---
-# Un iterable (lista, string, dic) puede convertirse en iterador con iter()
-lista = [10, 20, 30]
-it = iter(lista)
+# Mecanismos para manejar secuencias de datos de forma eficiente en memoria.
 
-print("Usando next():")
-print(next(it)) # 10
-print(next(it)) # 20
-# print(next(it)) # 30
-# next(it) # Lanzaría StopIteration al agotarse
+# -------------------------------- Iteradores --------------------------------
+# Un iterador es un objeto que representa un flujo de datos.
+# Se obtiene de un iterable (lista, tupla...) con `iter()`.
+# Se consume con `next()`.
+print("--- Iterador ---")
+lista_iterable = [10, 20, 30]
+mi_iterador = iter(lista_iterable)
+
+# `next()` devuelve el siguiente elemento o lanza StopIteration si se agota.
+print("Elemento 1:", next(mi_iterador))
+print("Elemento 2:", next(mi_iterador))
+
+# El bucle `for` usa iteradores internamente de forma automática.
 
 
-# --- Generadores ---
-# Funciones que usan 'yield' para devolver valores uno a uno, manteniendo el estado
+# ------------------------------- Generadores --------------------------------
+# Son una forma sencilla de crear iteradores usando funciones con la palabra `yield`.
+# `yield` "pausa" la función y devuelve un valor, guardando el estado para la próxima llamada.
 
+# --- Generador finito: números pares ---
 def generador_pares(limite):
-    """Genera números pares hasta un límite"""
-    n = 0
-    while n <= limite:
-        yield n # La función se "pausa" aquí y devuelve el valor
-        n += 2
+    numero = 0
+    while numero <= limite:
+        yield numero
+        numero += 2
 
-print("
-Recorriendo un generador con un bucle for:")
+print("\n--- Generador de Pares ---")
+# El generador se consume al iterar sobre él.
 for p in generador_pares(10):
     print(p, end=" ")
 print()
 
-# Generador infinito (ejemplo conceptual)
+
+# --- Generador infinito: serie de Fibonacci ---
+# Ideales para secuencias infinitas, pues solo calculan el valor cuando se pide.
 def fibonacci():
-    """Generador infinito de la serie de Fibonacci"""
     a, b = 0, 1
     while True:
         yield a
         a, b = b, a + b
 
-print("
-Primeros 5 números de Fibonacci:")
-fib = fibonacci()
-for _ in range(5):
-    print(next(fib), end=" ")
+print("\n--- Generador Infinito (Fibonacci) ---")
+generador_fib = fibonacci()
+print("Primeros 10 números de Fibonacci:")
+for _ in range(10):
+    print(next(generador_fib), end=" ")
 print()
 
-# Ventaja: Los generadores son eficientes en memoria porque no guardan 
-# toda la lista, solo calculan el siguiente valor bajo demanda.
+# Ventaja principal: Eficiencia de memoria. No se guarda la secuencia completa.

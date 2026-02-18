@@ -1,21 +1,41 @@
-# 04_03_with_context.py
+################################################################################
+#                                                                              #
+#              04_03_with_context (Context Managers)                           #
+#                                                                              #
+################################################################################
 
-# El bloque 'with' asegura que el fichero se cierre automáticamente,
-# incluso si ocurre un error durante el procesamiento.
-# Es la forma profesional de manejar ficheros en Python.
+# El manejador de contexto `with` es la forma recomendada para trabajar con ficheros.
+#
+# Ventajas:
+# 1. Cierre automático: El fichero se cierra al salir del bloque `with`.
+# 2. Seguridad ante excepciones: El fichero se cierra incluso si ocurre un error.
 
-nombre_fichero = "fichero.txt"
+nombre_fichero = "fichero_con_with.txt"
 
-# Escritura con 'with'
-with open(nombre_fichero, "wt", encoding="utf-8") as f:
-    f.write("Línea 1 con context manager")
-    f.write("Línea 2 con context manager")
+# ------------------- Escritura con `with` -------------------
+print("--- Escribiendo con `with` ---")
+try:
+    with open(nombre_fichero, "w", encoding="utf-8") as f:
+        f.write("Línea 1 escrita con el context manager.\n")
+        f.write("Línea 2, también con 'with'.\n")
+        # Si un error ocurriese aquí, el fichero se cerraría igual.
 
-# Lectura con 'with'
-print(f"Leyendo '{nombre_fichero}':")
-with open(nombre_fichero, "rt", encoding="utf-8") as f:
-    for linea in f:
-        print(linea.strip())
+    # Al salir del bloque, el fichero ya está cerrado.
+    print(f"El fichero '{nombre_fichero}' se ha cerrado automáticamente.")
 
-# Aquí el fichero ya está cerrado automáticamente
-# No hace falta llamar a f.close()
+except IOError as e:
+    print(f"Ocurrió un error de escritura: {e}")
+
+
+# -------------------- Lectura con `with` --------------------
+print(f"\n--- Leyendo con `with` ---")
+try:
+    with open(nombre_fichero, "r", encoding="utf-8") as f:
+        # El fichero 'f' está abierto solo dentro de este bloque.
+        for linea in f:
+            print(f"  > {linea.strip()}")
+
+except FileNotFoundError:
+    print(f"Error: El fichero '{nombre_fichero}' no existe.")
+
+# No es necesario llamar a f.close().

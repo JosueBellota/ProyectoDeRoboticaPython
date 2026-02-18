@@ -1,34 +1,52 @@
-# 03_07_practice.py
+################################################################################
+#                                                                              #
+#                       03_07_practice.py (Solutions)                          #
+#                                                                              #
+################################################################################
 
-# EJERCICIOS PARA PRACTICAR
-
-# 1. Crea una función llamada `without_first_letter` que dada una lista de palabras, 
-# devuelva una nueva lista con la primera letra de cada palabra eliminada.
-# Tip: Usa list comprehension o map() con lambda.
+# --- 1. Eliminar la primera letra de una lista de palabras ---
 def without_first_letter(palabras):
-    pass
+    return [palabra[1:] for palabra in palabras]
 
-# 2. Crea una función llamada `get_minimum` que dada una lista de números, 
-# devuelva el valor mínimo encontrado.
+# Prueba
+lista_palabras = ["Hola", "Python", "Mundo"]
+print(f"1. Sin primera letra: {without_first_letter(lista_palabras)}")
+
+
+# --- 2. Encontrar el valor mínimo en una lista ---
 def get_minimum(numeros):
-    pass
+    return min(numeros) if numeros else None
 
-# 3. Crea una función llamada `squares_greater` que dada una lista de números, 
-# devuelva una nueva lista con los cuadrados de aquellos números mayores que 10.
-# Tip: Usa comprehension con condicional.
-def squares_greater(numeros):
-    pass
+# Prueba
+lista_numeros_1 = [4, 1, 9, -3, 8]
+print(f"\n2. Mínimo de {lista_numeros_1}: {get_minimum(lista_numeros_1)}")
 
-# 4. Crea un diccionario donde las claves sean nombres de frutas y los valores su precio.
-# Luego, crea un nuevo diccionario (usando comprehension) que solo contenga 
-# las frutas que cuestan más de 2 euros.
+
+# --- 3. Cuadrados de números mayores que 10 ---
+def squares_greater_than_10(numeros):
+    return [n**2 for n in numeros if n > 10]
+
+# Prueba
+lista_numeros_2 = [5, 12, 8, 15, 10]
+print(f"\n3. Cuadrados de >10 en {lista_numeros_2}: {squares_greater_than_10(lista_numeros_2)}")
+
+
+# --- 4. Filtrar un diccionario por valor (precio > 2.0) ---
 frutas = {"Manzana": 1.5, "Banana": 0.8, "Kiwi": 3.0, "Mango": 2.5}
-# frutas_caras = ...
+frutas_caras = {fruta: precio for fruta, precio in frutas.items() if precio > 2.0}
 
-# 5. Escribe una función generadora que devuelva la cuenta atrás desde un número dado.
-def cuenta_atras(n):
-    pass
+# Prueba
+print("\n4. Frutas caras (> 2.0€):", frutas_caras)
 
-# --- ESPACIO PARA TUS PRUEBAS ---
-if __name__ == "__main__":
-    print("Ejecuta tus funciones aquí para probarlas.")
+
+# --- 5. Generador de cuenta atrás ---
+def cuenta_atras(numero_inicial):
+    while numero_inicial >= 0:
+        yield numero_inicial
+        numero_inicial -= 1
+
+# Prueba
+print("\n5. Cuenta atrás desde 5:")
+for numero in cuenta_atras(5):
+    print(numero, end=" ")
+print()

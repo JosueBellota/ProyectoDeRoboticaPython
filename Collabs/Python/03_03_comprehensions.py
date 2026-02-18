@@ -1,42 +1,49 @@
-# 03_03_comprehensions.py
+################################################################################
+#                                                                              #
+#                       03_03_comprehensions.py                                #
+#                                                                              #
+################################################################################
 
-# Comprehensions: forma elegante de crear colecciones
+# Forma concisa de crear colecciones (listas, diccionarios, etc).
 
+# -------------------------- List Comprehensions ---------------------------
+# Sintaxis: [expresion for elemento in iterable if condicion]
+
+# --- Transformación simple ---
 valores = [2, 5, 12, 10]
-
-# --- List Comprehension ---
-# [expresión for elemento in iterable if condición]
-
-# 1. Transformación simple
 dobles = [x * 2 for x in valores]
 print(f"Original: {valores} -> Dobles: {dobles}")
 
-# 2. Con filtrado (if)
+# --- Con condición de filtrado (if) ---
 lista = [14, 5, 12, 16, 9, 7, 10]
 solo_pares = [x for x in lista if x % 2 == 0]
-print(f"Solo pares de {lista}: {solo_pares}")
+print(f"\nSolo pares de {lista}: {solo_pares}")
 
-# 3. Múltiples condiciones
-pares_mayores_10 = [x for x in lista if x % 2 == 0 if x > 10]
-print(f"Pares > 10: {pares_mayores_10}")
+# --- Múltiples condiciones `if` ---
+pares_mayores_10 = [x for x in lista if x % 2 == 0 and x > 10]
+print(f"Pares mayores que 10: {pares_mayores_10}")
 
-# 4. If-Else (cambia la posición)
-# [valor_if if condicion else valor_else for elemento in iterable]
+# --- Condicional if-else (ternario) ---
+# Sintaxis: [valor_si_true if condicion else valor_si_false for e in iterable]
 pares_o_cero = [x if x % 2 == 0 else 0 for x in lista]
-print(f"Pares o cero: {pares_o_cero}")
+print(f"Pares o Cero (si es impar): {pares_o_cero}")
 
-# 5. Anidadas (ej. Traspuesta de matriz)
-matriz = [[1, 2, 3, 4], [4, 5, 6, 8]]
+# --- Anidadas (ej. traspuesta de matriz) ---
+matriz = [[1, 2, 3], [4, 5, 6]]
 traspuesta = [[fila[i] for fila in matriz] for i in range(len(matriz[0]))]
-print(f"Matriz: {matriz}")
-print(f"Traspuesta: {traspuesta}")
+print(f"\nMatriz: {matriz} -> Traspuesta: {traspuesta}")
 
 
-# --- Dictionary Comprehension ---
-# {clave: valor for elemento in iterable if condición}
-
+# ----------------------- Dictionary Comprehensions ------------------------
+# Sintaxis: {clave: valor for elemento in iterable if condicion}
 dic_original = {"a": 1, "b": 2, "c": 3, "d": 4}
 cuadrados_dic = {k: v**2 for k, v in dic_original.items() if v > 2}
-print(f"
-Diccionario original: {dic_original}")
-print(f"Diccionario filtrado y al cuadrado (v > 2): {cuadrados_dic}")
+print(f"\nDiccionario con valores > 2 al cuadrado: {cuadrados_dic}")
+
+
+# -------------------------- Set Comprehensions ----------------------------
+# Sintaxis: {expresion for elemento in iterable if condicion}
+# Crea un conjunto (sin duplicados).
+numeros_con_duplicados = [1, 2, 2, 3, 4, 4, 5]
+conjunto_unicos_cuadrado = {x**2 for x in numeros_con_duplicados}
+print(f"\nConjunto de cuadrados (únicos): {conjunto_unicos_cuadrado}")
