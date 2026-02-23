@@ -5,14 +5,12 @@
 class Aircraft:
     """ Creamos una nueva persona con un nombre y una edad """
 
-# texto
     __registration = str 
 
-# mnumero
     __model = str
-# lista
+
     __nun_rows = int
-# diccionario
+
     __num_seats_per_row = int
 
 
@@ -56,6 +54,7 @@ class Aircraft:
         """
 
         caracteres = []
+        rows = []
         # alfabeto ingles
         # Mayúsculas	A	65
         # Minúsculas	a	97
@@ -63,9 +62,14 @@ class Aircraft:
 
             caracteres.append(chr(i))
         
-        letters = "".join(caracteres)
+        seats = "".join(caracteres)
 
-        return(self.__num_rows, letters)
+
+        for i in range(self.__num_rows + 1):
+
+            rows.insert(i, None)
+
+        return(rows, seats)
             
 
        

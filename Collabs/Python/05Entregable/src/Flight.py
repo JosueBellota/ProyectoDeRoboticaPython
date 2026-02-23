@@ -1,13 +1,38 @@
+from Aircraft import Aircraft, Airline, Airbus
 
-class Flight:
 
-    __number = None
-    __aircraft = None
-    __seating = None
+class Flight(Aircraft):
 
-    def __init__(self, n, e):
-        self.nombre = n
-        self.edad = e
+    __number = str
+    __aircraft = Aircraft
+    __seating = list
+
+
+    
+
+    def __init__(self, nombre, aircraft):
+        self.__nombre = nombre
+        
+        # Guardamos la instancia de la otra clase como atributo privado
+        if isinstance(aircraft, Aircraft):
+            self.__aircraft = aircraft
+        else:
+            print("Error: El parámetro debe ser una instancia de la clase Aircraft")
+
+    def __defining_seating(self):
+
+        row = {}
+
+        tupla = Aircraft.seating_plan()
+
+        for i in range(len(tupla[0])):
+            
+            for i in range(len(tupla[1])):
+
+                self.__seating.insert(i, row)
+            
+
+
 
     def get_number():
 
