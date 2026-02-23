@@ -6,7 +6,7 @@ class Moto(Transporte):
     """
     # Declaración de variables privadas específicas de Moto
     __cilindrada: int
-
+# pero antes de hacer mis cosas, ve a la clase padre (Transporte) y ejecuta su constructor usando estos datos
     def __init__(self, marca: str, modelo: str, año: int, cilindrada: int):
         """
         Inicializa un objeto Moto.
