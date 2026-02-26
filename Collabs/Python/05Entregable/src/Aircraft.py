@@ -1,50 +1,24 @@
-# from pprint import pprint
-
-# pprint(seating)
+from pprint import pprint
 
 class Aircraft:
-    """ Creamos una nueva persona con un nombre y una edad """
-
-    __registration = str 
-
-    __model = str
-
-    __nun_rows = int
-
-    __num_seats_per_row = int
-
+    """Class representing an aircraft"""
 
     def __init__(self, registration, model, num_rows, num_seats_per_row):
-
-        # supera el limite del abecedario 
-        if(num_seats_per_row > 26):
-            
-            print("the numbers of seat per row cannot be more than 26 ")
-        else:
-            self.__registration = registration
-            self.__model  = model
-            self.__num_rows = num_rows
-            self.__num_seats_per_row = num_seats_per_row
+        if num_seats_per_row > 26:
+            raise ValueError("The number of seats per row cannot be more than 26.")
+        
+        self.__registration = registration
+        self.__model = model
+        self.__num_rows = num_rows
+        self.__num_seats_per_row = num_seats_per_row
 
     def get_registration(self):
-
-        """Calculates the number of seats
-        Returns:
-        seats: The number of seats
-        """
-
-        return(self.__registration)
+        """Returns the registration string of the aircraft"""
+        return self.__registration
 
     def get_model(self):
-
-        """Calculates the number of seats
-        Returns:
-        seats: The number of seats
-        """
-
-        return(self.__model)
-        
-
+        """Returns the model name of the aircraft"""
+        return self.__model
 
     def seating_plan(self):
         """Generates a seating plan for the number of rows and seats per row
@@ -52,84 +26,53 @@ class Aircraft:
         rows: A list of Nones (size num_rows + 1).
         seats: A string of letters such as "ABCDEF"
         """
+        seat_letters = "".join(chr(65 + i) for i in range(self.__num_seats_per_row))
+        rows = [None] * (self.__num_rows + 1)
+        return rows, seat_letters
 
-        caracteres = []
-        rows = []
-        # alfabeto ingles
-        # Mayúsculas	A	65
-        # Minúsculas	a	97
-        for i in range(65, 65 + self.__num_seats_per_row):
-
-            caracteres.append(chr(i))
-        
-        seats = "".join(caracteres)
-
-
-        for i in range(self.__num_rows + 1):
-
-            rows.insert(i, None)
-
-        return(rows, seats)
-            
-
-       
     def num_seats(self):
-        """Calculates the number of seats
+        """Calculates the total number of seats
         Returns:
-        seats: The number of seats
+        The number of seats
         """
-        
-        number_of_seats = self.__num_rows * self.__num_seats_per_row
+        return self.__num_rows * self.__num_seats_per_row
 
-        return(number_of_seats)
 
-class Airline(Aircraft):
-
+class Boeing(Aircraft):
+    """Class representing a Boeing aircraft"""
     __model = "Boeing 777"
     __num_rows = 56
     __num_seats_per_row = 9
-    __airline = str
 
     def __init__(self, registration, airline):
- 
-
-        # llamando al constructor del padre para que rellene tus datos usa los parametro privados de airline en vez de los por defecto.
         super().__init__(
-            registration, 
-            model = Airline.__model,
-            num_rows =  Airline.__num_rows, 
-            num_seats_per_row = Airline.__num_seats_per_row)
-
+            registration,
+            model=Boeing.__model,
+            num_rows=Boeing.__num_rows,
+            num_seats_per_row=Boeing.__num_seats_per_row
+        )
         self.__airline = airline
-       
-        
-    def get_airline(self):
 
+    def get_airline(self):
+        """Returns the name of the airline operating this Boeing"""
         return self.__airline
 
 
-
-
-
 class Airbus(Aircraft):
-
+    """Class representing an Airbus aircraft"""
     __model = "Airbus A319"
-    __num_rows = 56
-    __num_seats_per_row = 9
-    __variant = str
+    __num_rows = 23
+    __num_seats_per_row = 6
 
     def __init__(self, registration, variant):
-
-   
-        # llamando al constructor del padre para que rellene tus datos usa los parametro privados de airline en vez de los por defecto.
         super().__init__(
-            registration, 
-            model = Airbus.__model,
-            num_rows =  Airbus.__num_rows, 
-            num_seats_per_row = Airbus.__num_seats_per_row)
+            registration,
+            model=Airbus.__model,
+            num_rows=Airbus.__num_rows,
+            num_seats_per_row=Airbus.__num_seats_per_row
+        )
+        self.__variant = variant
 
-        self.__variant  = variant
-        
     def get_variant(self):
-
+        """Returns the specific variant of this Airbus"""
         return self.__variant

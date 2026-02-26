@@ -1,0 +1,239 @@
+wsl --shutdown
+
+eliminar una carpeta
+
+rm -rf nombre_del_directorio
+
+
+        cd ROS2/turtlebot3_ws/src
+
+
+Paso A: Abrir el mundo (La carga pesada)
+
+Path: Cualquier terminal de Ubuntu.
+
+Comando:
+
+Bash
+
+ros2 launch webots_ros2_turtlebot robot_launch.py
+
+Paso B: Controlar el robot (Teleop)
+
+Path: Abre una segunda terminal de Ubuntu.
+
+Comando:
+
+Bash
+
+
+iniciar el robot en webots
+
+        ros2 run turtlebot3_teleop teleop_keyboard
+
+
+
+
+topic:
+
+
+ros2 topic pub /mi_primer_topic std_msgs/msg/String "{data: 'Hola ROS2'}"
+
+ros2 topic echo /mi_primer_topic
+
+en src:
+
+ros2 pkg create --build-type ament_python mi_controlador --dependencies rclpy std_msgs
+
+
+movimiento del robot:
+
+
+
+en caso de error hacer ingenieria inversa del comando con teclado manual pa saber 
+la estructura a enviar al topic:
+
+ros2 topic echo /cmd_vel
+
+
+Ejecuta este comando para hacer que el robot avance y gire un poco (creando un círculo):
+
+Bash
+ros2 topic pub /cmd_vel geometry_msgs/msg/TwistStamped "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: 'base_link'}, twist: {linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.4}}}"
+
+
+comandos auxiliares:
+
+canales abiertos:
+
+
+        ros2 topic list
+
+        topic de velocidad
+
+        ros2 topic info /cmd_vel
+
+        ver la estructura del mensaje:
+
+        ros2 interface show geometry_msgs/msg/TwistStamped
+
+        frecuencia en la que se envian los datos:
+
+        ros2 topic hz /cmd_vel
+
+        ver el ancho de banda:
+
+        ros2 topic bw /cmd_vel
+
+
+creando el publicador:
+
+
+        # Crear el paquete exactamente como indica el Colab
+        ros2 pkg create --build-type ament_python my_first_publisher --dependencies rclpy std_msgs geometry_msgs
+
+
+Dentro del directorio my_first_publisher vamos a crear un nuevo directorio denominado launch. En el incluiremos el fichero 
+de lanzamiento my_first_publisher.launch.py. 
+
+editamos los codigos python de launch/  my_first_publisher/
+
+        ros2 launch webots_ros2_turtlebot robot_launch.py
+
+        # 1. Ve a la raíz
+        cd ~/ROS2/turtlebot3_ws/
+
+        # 2. Borra lo antiguo para evitar conflictos de nombres
+        rm -rf install/ build/
+
+        # 3. Compila de nuevo
+        colcon build --packages-select my_first_publisher
+
+        # 4. Refresca la terminal
+        source install/setup.bash
+
+        # 5. Ahora sí funcionará como el de tus compañeros
+        ros2 run my_first_publisher simple_publisher
+
+
+        3. El "Reset" necesario
+
+        cd ~/ROS2/turtlebot3_ws
+
+        rm -rf build/ install/ log/
+
+        # Compilamos con symlinks (esto ayuda a que si mueves el .py no tengas que recompilar)
+        colcon build --packages-select my_first_publisher --symlink-install
+
+        # Refrescamos
+        source install/setup.bash
+
+        opcion 2 en vez de ejecuta el simple_publisher directo el launch pero no hace falta ambos
+
+        ros2 launch my_first_publisher my_first_publisher.launch.py
+
+
+        export DISPLAY=:0
+        ros2 run rqt_graph rqt_graph
+
+    # Gazebo:
+
+
+    killall -9 gz server gz sim ruby
+
+  
+
+[√] 3. Lanzamiento del Simulador:
+
+killall -9 gz server gz sim ruby 2>/dev/null
+
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+
+#copila a 0.5 de velocidad
+
+ros2 launch turtlebot3_gazebo empty_world.launch.py extra_gz_args:="--physics-engine gz-physics-system --rtf 0.5"
+
+Mover mediante topic:
+
+ros2 topic pub /cmd_vel geometry_msgs/msg/TwistStamped "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: 'base_link'}, twist: {linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.4}}}"
+
+
+
+    # --- COMANDOS DE DIAGNÓSTICO ---
+
+    Ver lista de canales activos:
+    ros2 topic list
+
+    Ver datos en tiempo real (Ingeniería Inversa):
+    ros2 topic echo /cmd_vel
+
+    Ver estructura del mensaje:
+    ros2 interface show geometry_msgs/msg/Twist
+
+    Ver gráfico de nodos (Requiere servidor X/WSLg):
+    export DISPLAY=:0
+    ros2 run rqt_graph rqt_graph
+
+
+    # --- CONTROL TÉRMICO Y MEMORIA ---
+
+    Limitar CPU al 80% (Requiere instalar sudo apt install cpulimit):
+    cpulimit -l 80 -- [comando_ros2]
+
+    Liberar caché de RAM en Ubuntu:
+    sudo sysctl -w vm.drop_caches=3
+
+    Configuración de hardware (Windows):
+    Editar %USERPROFILE%\.wslconfig para limitar processors=2 y memory=5GB.
+
+    Ver graficos del sistema:
+
+    export DISPLAY=:0
+    ros2 run rqt_graph rqt_graph
+
+
+
+creando el publicador:
+
+
+    # 1. Ve a la raíz
+    cd ~/ROS2/turtlebot3_ws/
+
+    # 2. Borra lo antiguo para evitar conflictos de nombres
+    rm -rf install/ build/
+
+    # 3. Compila de nuevo
+    colcon build --packages-select my_first_publisher
+
+    # 4. Refresca la terminal
+    source install/setup.bash
+
+    # 5. Ahora sí funcionará como el de tus compañeros
+    ros2 run my_first_publisher simple_publisher
+
+
+    3. El "Reset" necesario
+
+    cd ~/ROS2/turtlebot3_ws
+
+    rm -rf build/ install/ log/
+
+    # Compilamos con symlinks (esto ayuda a que si mueves el .py no tengas que recompilar)
+    colcon build --packages-select my_first_publisher --symlink-install
+
+    # Refrescamos
+    source install/setup.bash
+
+    opcion 2 en vez de ejecuta el simple_publisher directo el launch pero no hace falta ambos
+
+    ros2 launch my_first_publisher my_first_publisher.launch.py
+
+
+    export DISPLAY=:0
+    ros2 run rqt_graph rqt_graph
+
+
+    // wsl --shutdown
+
+
+    
